@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  web:
+    image: php:apache # Or php:fpm with a separate Nginx service
+    volumes:
+      - ./src:/var/www/html
+    ports:
+      - "88:80"
+    depends_on:
+      - db
+    environment:
+      MYSQL_HOST: db # Link to the database service name
+
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: saket@123456789 # Change this!
+      MYSQL_DATABASE: new
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    platform: linux/amd64
+    ports:
+      - "8088:80" # Access phpMyAdmin on port 8088
+    environment:
+      PMA_HOST: db # Link to the database service name
+      MYSQL_ROOT_PASSWORD: saket@123456789 # Same as db service
+    depends_on:
+      - db
